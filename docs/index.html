@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Upper Chitral terrain deep dive: what the red bands are, DEM structure, Sentinel-2/ASTER/EMIT/Sentinel-1 evidence, and where to sample for Reshun-fault Sb-Pb-Au veins.">
+<style>*{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Charun–Buni Red Belt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#f2f3f1; --panel:#e6e8e4; --ink:#1d242c; --muted:#56606b; --rule:#c9cdc7;
+  --hematite:#a3312a; --ochre:#9a6a17; --slate:#4f6275; --good:#2e6b45;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"Source Serif 4",Georgia,"Times New Roman",serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15191e; --panel:#1f252c; --ink:#e4e7ea; --muted:#9aa4ae; --rule:#333b44;
+  --hematite:#e0685e; --ochre:#d6a346; --slate:#8fa6bd; --good:#6fbf8c; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#15191e; --panel:#1f252c; --ink:#e4e7ea; --muted:#9aa4ae; --rule:#333b44;
+  --hematite:#e0685e; --ochre:#d6a346; --slate:#8fa6bd; --good:#6fbf8c; color-scheme:dark;}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:40px 80px}
+.col{max-width:68ch}
+h1,h2,h3{font-family:var(--display);font-stretch:80%;line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;letter-spacing:-.01em}
+h1 span{color:var(--hematite)}
+h2{font-size:1.75rem;font-weight:750;margin-top:56px;padding-top:18px;border-top:2px solid var(--ink)}
+h3{font-size:1.15rem;font-weight:700;margin-top:28px}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.2rem;margin-top:14px}
+p{margin:12px 0}
+a{color:var(--slate)}
+.coords{font-family:var(--mono);font-size:.85rem;font-variant-numeric:tabular-nums}
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:28px}
+.verdict div{border-top:4px solid var(--rule);padding-top:10px}
+.verdict .k{font-family:var(--display);font-stretch:80%;font-weight:700;font-size:1.05rem}
+.verdict .red{border-color:var(--hematite)} .verdict .och{border-color:var(--ochre)} .verdict .sl{border-color:var(--slate)}
+figure{margin:24px 0}
+figure img{display:block;width:100%;border:1px solid var(--rule)}
+figcaption{font-size:.88rem;color:var(--muted);margin-top:8px;max-width:90ch}
+.tw{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;font-size:.88rem;min-width:640px;width:100%}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--display);font-stretch:85%;font-weight:700;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:.82rem}
+.sw{display:inline-block;width:12px;height:12px;border:1px solid var(--rule);vertical-align:-1px;margin-right:6px}
+.tag{font-family:var(--mono);font-size:.72rem;padding:1px 6px;border:1px solid currentColor;border-radius:3px;white-space:nowrap}
+.t-computed{color:var(--good)} .t-primary{color:var(--slate)} .t-unver{color:var(--ochre)}
+.note{background:var(--panel);padding:14px 18px;margin:20px 0;max-width:80ch}
+.note b{font-family:var(--display);font-stretch:85%}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
+ol.refs{font-size:.88rem;padding-left:20px} ol.refs li{margin:6px 0}
+code{font-family:var(--mono);font-size:.85em}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="col">
+  <div class="eyebrow">Upper Chitral · Mastuj valley · 36.11–36.34°N, 72.05–72.32°E</div>
+  <h1>The Charun–Buni <span>red belt</span></h1>
+  <p class="lede">What the colours in the Charun–Buni view are, how the terrain is built, and what DEM, Sentinel-2, ASTER, EMIT hyperspectral and Sentinel-1 radar show about ore potential.</p>
+  <p class="eyebrow">RegenX.eco · 28 Sep 2026 · analysis run on public satellite archives</p>
+  <p class="eyebrow"><a href="Charun_Buni_Prospectivity.kml">Download KML for Google Earth</a> · <a href="https://github.com/dinarwali4/charun-buni-red-belt">Code and data on GitHub</a></p>
+</header>
+
+<section class="verdict">
+  <div class="red"><div class="k">The red is depositional hematite</div>The maroon bands are the Reshun Formation: hematite-red siltstone and conglomerate of Late Cretaceous to Palaeogene age. They form one continuous belt 25 km long and about 40 km² in area, from Reshun to past Buni.</div>
+  <div class="sl"><div class="k">No gossan is visible from space</div>Rock is exposed over 68% of the area. No multispectral anomaly survives a test for altitude. EMIT gives two weak leads, and neither is confirmed by a second sensor.</div>
+  <div class="och"><div class="k">The potential is structural</div>Chitral's known antimony–lead–gold(–silver) veins lie along the Reshun fault zone. The margins of this red belt are those thrusts. Such veins are too narrow for satellites to resolve, so the next step is stream sediments, at 14 sites.</div>
+</section>
+
+<h2>1 · Where this is</h2>
+<div class="col">
+<p>The view looks north-north-west across the Mastuj River, from above the ridge south of Charun Oweer. I geocoded all 24 village labels in the screenshot from OpenStreetMap and used them to fit a perspective camera. The fit places the viewpoint over <span class="coords">36.11°N 72.22°E</span>, heading about 349°.</p>
+<p>Village labels all sit on the valley floor, so they fix direction well but distance poorly. An independent render from that camera does not reproduce the foreground (see Methods). The location is therefore fixed from the red bands themselves. In map view they are unmistakable (§2). Your view spans the valley from Sholiri Gohkir <span class="coords">(72.107°E)</span> to Pachili Awi Lusht <span class="coords">(72.300°E)</span>. It runs from the Mulkhow villages in the north <span class="coords">(36.33°N)</span> to the ridges south of the red belt <span class="coords">(≈36.16°N)</span>.</p>
+</div>
+<figure><img src="img/shot_annotated.jpg" alt="Screenshot of the Mapbox 3D view with rock units labelled"><figcaption>Your screenshot with the units identified. A: Reshun Formation red siltstone. B: pale carbonate-dominant bands. C: grey-brown slate and shale slopes with debris. D: irrigated alluvial fans at Buni. E: Mastuj River and the N-140. Identifications rest on the map-view match in §2 and on USGS OFR 75-556.</figcaption></figure>
+
+<div class="tw"><table>
+<thead><tr><th>Place</th><th class="n">Lat °N</th><th class="n">Lon °E</th><th>Role</th></tr></thead>
+<tbody>
+<tr><td>Charun</td><td class="n">36.2273</td><td class="n">72.1861</td><td>Valley village; Charun Gol is the type locality of the Charun Quartzite</td></tr>
+<tr><td>Charun Oweer</td><td class="n">36.2265</td><td class="n">72.2106</td><td>Directly north of the thickest red bands</td></tr>
+<tr><td>Kuragh</td><td class="n">36.2196</td><td class="n">72.1609</td><td>Devonian fossil ridge (Hayden 1914) just south</td></tr>
+<tr><td>Buni</td><td class="n">36.2701</td><td class="n">72.2625</td><td>NE end of the belt; the Reshun Fm crosses the river here</td></tr>
+<tr><td>Reshun</td><td class="n">36.1536</td><td class="n">72.0993</td><td>SW end; the formation's informal type section</td></tr>
+<tr><td>Red-belt centroid</td><td class="n">36.200</td><td class="n">72.205</td><td>Sentinel-2 outline, 43.8 km² in 14 polygons</td></tr>
+</tbody></table></div>
+
+<h2>2 · What the colours are</h2>
+<div class="col">
+<p>Karl Stauffer's 1975 USGS reconnaissance of the central Mastuj valley covered exactly this ground. He mapped the Reshun Formation as <em>"massive, light-brown, ridge-forming conglomerate and beds of red siltstone"</em>. He traced it along the left bank from Reshun to Buni and noted that its upper and lower limits are north-west-dipping thrust faults. Terraces fed by these siltstones carry soil that he called always bright red.</p>
+<p>A redness index on the Sentinel-2 12-scene composite reproduces that belt in map view. It follows the same bank, the same ENE strike and the same end points.</p>
+</div>
+<figure><img src="img/mapview_red.jpg" alt="Sentinel-2 true colour and redness index maps"><figcaption>Left: Sentinel-2 L2A median of 12 Aug–Sep scenes (2023–2026), 20 m, with hillshade. Black means no clear observation (shadow or snow). Right: redness (B4−B3)/(B4+B3) on exposed rock. The red belt runs ENE from Reshun to beyond Buni.</figcaption></figure>
+
+<div class="col"><p>An unsupervised clustering of seven illumination-robust Sentinel-2 features splits the exposed rock into seven colour units. I then described each unit with two independent sensors: ASTER thermal emissivity (quartz and carbonate) and the minerals EMIT identified on the same ground.</p></div>
+<figure><img src="img/units_map.jpg" alt="Map of seven spectral colour units"></figure>
+<div class="tw"><table>
+<thead><tr><th>Unit</th><th class="n">Area</th><th class="n">Redness</th><th class="n">ASTER QI</th><th class="n">ASTER CI</th><th class="n">EMIT ferric</th><th class="n">EMIT carbonate</th><th class="n">EMIT chlorite/epidote</th><th class="n">EMIT white mica</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td><span class="sw" style="background:#b3261e"></span>U1</td><td class="n">3%</td><td class="n">0.208</td><td class="n">1.016</td><td class="n">1.0006</td><td class="n">96%</td><td class="n">74%</td><td class="n">23%</td><td class="n">1%</td><td>Reshun Fm red siltstone core</td></tr>
+<tr><td><span class="sw" style="background:#e07a4a"></span>U6</td><td class="n">20%</td><td class="n">0.119</td><td class="n">1.020</td><td class="n">1.0008</td><td class="n">74%</td><td class="n">86%</td><td class="n">4%</td><td class="n">8%</td><td>Red-brown clastics, terraces, red-bed debris</td></tr>
+<tr><td><span class="sw" style="background:#e8c39e"></span>U4</td><td class="n">13%</td><td class="n">0.084</td><td class="n">1.014</td><td class="n">1.0028</td><td class="n">63%</td><td class="n">89%</td><td class="n">4%</td><td class="n">3%</td><td>Pale ferruginous carbonate (Shogram dolomite, limestone-clast conglomerate)</td></tr>
+<tr><td><span class="sw" style="background:#f4f1e8"></span>U2</td><td class="n">11%</td><td class="n">0.043</td><td class="n">1.011</td><td class="n">0.9984</td><td class="n">10%</td><td class="n">55%</td><td class="n">12%</td><td class="n">4%</td><td>Bright pale rock, including high scree</td></tr>
+<tr><td><span class="sw" style="background:#9c8263"></span>U0</td><td class="n">21%</td><td class="n">0.078</td><td class="n">1.028</td><td class="n">0.9970</td><td class="n">33%</td><td class="n">62%</td><td class="n">15%</td><td class="n">11%</td><td>Brown slope debris, mixed</td></tr>
+<tr><td><span class="sw" style="background:#5d4a3a"></span>U5</td><td class="n">15%</td><td class="n">0.095</td><td class="n">1.025</td><td class="n">0.9970</td><td class="n">55%</td><td class="n">56%</td><td class="n">12%</td><td class="n">27%</td><td>Dark high ground on the Buni Zom flank (micaceous)</td></tr>
+<tr><td><span class="sw" style="background:#6b7b8c"></span>U3</td><td class="n">18%</td><td class="n">0.050</td><td class="n">1.034</td><td class="n">0.9953</td><td class="n">24%</td><td class="n">32%</td><td class="n">39%</td><td class="n">8%</td><td>Grey shale/slate: Sarikol Shale north of the river, Chitral Slate south</td></tr>
+</tbody></table></div>
+<div class="col"><p class="eyebrow">EMIT columns: share of unit pixels where the mineral family was identified on ≥3 of 5 dates. QI = quartz index B11²/(B10·B12), higher = more quartz. CI = carbonate index B13/B14, higher = more carbonate.</p>
+<p>The units agree across sensors. The red core is 96% ferric by EMIT. The pale units have the highest carbonate index. The grey unit has the highest quartz index (slates are quartz-rich) and the most chlorite and epidote. This is ordinary low-grade metamorphism, which the KP Directorate's report puts at no higher than greenschist facies for Chitral.</p></div>
+<figure><img src="img/aster_tir.jpg" alt="ASTER thermal quartz and carbonate index maps"><figcaption>ASTER TIR emissivity (AST_05, five clear scenes 2001–2003), median, exposed rock only.</figcaption></figure>
+
+<h2>3 · How the terrain is built</h2>
+<div class="two">
+<div>
+<div class="tw"><table>
+<thead><tr><th>Copernicus GLO-30</th><th class="n">View area</th><th class="n">South-bank core</th></tr></thead>
+<tbody>
+<tr><td>Area</td><td class="n">618 km²</td><td class="n">192 km²</td></tr>
+<tr><td>Elevation range</td><td class="n">1,775–6,102 m</td><td class="n">1,858–5,843 m</td></tr>
+<tr><td>Relief</td><td class="n">4,327 m</td><td class="n">3,985 m</td></tr>
+<tr><td>Median elevation</td><td class="n">3,037 m</td><td class="n">3,347 m</td></tr>
+<tr><td>Mean slope</td><td class="n">28.2°</td><td class="n">32.1°</td></tr>
+<tr><td>Slopes &gt;35° / &gt;45°</td><td class="n">33% / 10%</td><td class="n">44% / 15%</td></tr>
+<tr><td>Hypsometric integral</td><td class="n">0.33</td><td class="n">0.38</td></tr>
+</tbody></table></div>
+</div>
+<div class="col">
+<p>The south bank rises almost 4 km from river to the Buni Zom massif in under 12 km. Slopes average 32°, and nearly half the core is steeper than 35°. A hypsometric integral of 0.33–0.38 marks a deeply dissected landscape: most rock mass sits low, cut by steep tributary gorges.</p>
+<p>Ridge crests in the core trend <b>065–085°</b>. Stauffer measured slate foliation striking N 60–80° E, so the ridges follow bedding and cleavage. Valleys cluster at 095–115°. As a control, the Mastuj valley itself runs 060° between Kuragh and Buni. Stauffer also mapped a younger set of near-vertical NNW faults, one just downstream of Kuragh. About 20% of the strong-curvature signal in the core trends NNW (150–010°).</p>
+</div>
+</div>
+<figure><img src="img/dem_panels.jpg" alt="Elevation, slope and local relief maps"></figure>
+<figure><img src="img/lineament_rose.jpg" alt="Rose diagrams of ridge and valley orientations"><figcaption>Orientation of strong DEM curvature (Hessian of a 60 m-smoothed DEM, along-feature eigenvector) in the south-bank core. The method recovered exact azimuths on four synthetic test ridges before use. At 30 m this measures ridge and drainage fabric, not individual fractures.</figcaption></figure>
+
+<h2>4 · Spectral evidence for mineralisation</h2>
+<h3>Sentinel-2 multispectral</h3>
+<div class="col">
+<p>Terrain here is arid and bare. After masking cloud, shadow, snow, vegetation and water, and applying a 0.02 reflectance floor, 68% of the grid is visible rock. At PL-53 in Upper Dir the figure was 11%. A null here therefore carries weight.</p>
+<p>The method has range in this scene. The raw ferric index sits at a median robust z of +2.0 inside the red belt and −0.1 outside it. To stop the red beds swamping everything, I searched for anomalies within each colour unit. A pixel counted when it was anomalous in at least two of four indices (ferric B4/B2, gossan B11/B4, Al-OH/carbonate B11/B12, 900 nm Fe³⁺).</p>
+<p>That first pass flagged 78 clusters. Almost all sat above 4,500 m on the Buni Zom flank, a median 350 m from snow. I then normalised by elevation band as well as unit, and the high-altitude cluster vanished completely. What remains at z &gt; 3 is 8 specks of 0.3–2 ha, mostly outside your view. None coincides with an EMIT hit. Frost-shattered fresh rock, weathering rinds and mixed snow/debris pixels explain the first pass better than sulphide oxidation does.</p>
+</div>
+<figure><img src="img/anomaly_elevation.jpg" alt="Bar chart of anomaly rate by elevation band before and after elevation normalisation" style="max-width:720px"></figure>
+
+<h3>EMIT imaging spectrometer (285 bands, 60 m)</h3>
+<div class="col">
+<p>Five EMIT L2B mineral-ID dates cover the area (Apr 2023 to Oct 2024), with retrievals on 93–100% of pixels. At PL-53 only 1 of 15 granules retrieved anything. For each mineral family I counted how many dates it was identified in each cell. I compared that with the count expected if identifications were random.</p>
+</div>
+<div class="tw"><table>
+<thead><tr><th>Family</th><th class="n">Cells on ≥3 dates</th><th class="n">Expected if random</th><th>Reading</th></tr></thead>
+<tbody>
+<tr><td>Carbonate</td><td class="n">94,170</td><td class="n">100,730</td><td>Everywhere; so common that persistence tells us nothing</td></tr>
+<tr><td>Ferric iron</td><td class="n">66,198</td><td class="n">52,562</td><td>Real, spatially stable; tracks the red belt</td></tr>
+<tr><td>Chlorite / epidote / prehnite</td><td class="n">20,321</td><td class="n">5,370</td><td>Real; greenschist-grade slate and volcanics</td></tr>
+<tr><td>White mica / illite / clay</td><td class="n">12,991</td><td class="n">1,340</td><td>Real; micaceous slate and the Buni Zom flank</td></tr>
+<tr><td>Jarosite / copiapite (sulphate)</td><td class="n">12</td><td class="n">0.0</td><td>Lead E1; one tight cluster</td></tr>
+<tr><td>"Azurite" (Cu carbonate)</td><td class="n">23</td><td class="n">0.1</td><td>Lead E2; scattered</td></tr>
+<tr><td>Non-mineral matches (plastic, dry grass)</td><td class="n">546</td><td class="n">3.8</td><td>Negative control</td></tr>
+</tbody></table></div>
+<div class="note"><b>Why the negative control matters.</b> Library matches to plastic and dry grass also repeat in the same cells, 140 times more often than chance. Repetition proves the surface is spectrally stable. It does not prove the label is right. E1 and E2 are leads for a geologist's hammer and nothing more.</div>
+<div class="col">
+<p><b>E1</b>, at <span class="coords">36.2090°N 72.2700°E</span> and 3,590–3,835 m, is about 9 cells of jarosite/copiapite, identified on up to 4 of 5 dates. It sits about 1 km from the red-belt margin. Sentinel-2 shows nothing there: the ferric and Al-OH z-scores are both about 0.3–0.5. Jarosite also forms on ordinary pyritic black shale, and there is plenty of that in the Chitral Slate and Sarikol Shale.</p>
+<p><b>E2</b>, near Buni at <span class="coords">36.262°N 72.289°E</span>, is 23 cells matched to azurite, scattered over about 1 km². Azurite's SWIR features resemble carbonate, and the surrounding rock is carbonate-rich. Treat it as unconfirmed.</p>
+</div>
+<figure><img src="img/emit_persist.jpg" alt="EMIT mineral persistence maps for four mineral families"><figcaption>Number of EMIT dates (of 5) on which each family was identified, 60 m cells.</figcaption></figure>
+
+<h3>ASTER shortwave infrared</h3>
+<div class="col"><p>Five pre-2008 AST_07XT scenes passed QC, with no clipped bands and 10–72% usable after the same masking. They give Al-OH, kaolinite/alunite and Mg-OH/carbonate indices. They match the unit picture above and add no independent alteration zone. There is no phyllic (sericite) or advanced-argillic (kaolinite/alunite) halo of the kind a porphyry would leave.</p></div>
+
+<h3>Hyperspectral options checked</h3>
+<div class="col"><p>EnMAP has no archive scene over the core area (DLR STAC, 0 results). EnMAP and PRISMA can both be tasked at 30 m, and a summer EnMAP acquisition is the realistic upgrade over EMIT. Any hyperspectral sensor is still optical and still limited by snow and shadow.</p></div>
+
+<h2>5 · Radar</h2>
+<div class="col" id="sar">
+<p>Sentinel-1 radar sees through cloud and at night, but in 4 km of relief the viewing geometry matters. I modelled layover and shadow from the DEM separately for each orbit. Orbit 173 ascending and orbit 5 descending each observe 92% of the grid cleanly, and 97% is clean in at least one of them. Orbit 100 clips the edge (23%) and was set aside. Following earlier Karakoram work, backscatter is compared only within an orbit, never across orbits.</p>
+<p>Radar does not detect ore minerals. It measures surface roughness and moisture, and here it confirms the colour units from an independent physical property. The same pattern appears in both geometries, so it is not a look-angle artefact:</p>
+</div>
+<div class="tw"><table>
+<thead><tr><th>Median VH γ⁰ (dB), local incidence 25–55°</th><th class="n">Orbit 173 asc</th><th class="n">Orbit 5 desc</th></tr></thead>
+<tbody>
+<tr><td>Red belt</td><td class="n">−16.5</td><td class="n">−16.2</td></tr>
+<tr><td>Everything else</td><td class="n">−15.0</td><td class="n">−15.0</td></tr>
+<tr><td>U2 bright pale rock (roughest)</td><td class="n">−13.6</td><td class="n">−13.6</td></tr>
+<tr><td>U1 red siltstone core (smoothest)</td><td class="n">−16.7</td><td class="n">−16.3</td></tr>
+</tbody></table></div>
+<div class="col">
+<p>The red belt returns 1.1–1.5 dB less than its surroundings: the soft siltstone breaks down to fine debris. Stauffer described exactly this weakness. The siltstones acted as a lubricant along the thrusts. He mapped a landslide about 1 mile wide and 3 miles long near Reri that is largely red Reshun siltstone. He also found the Sarikol Shale between Lon and Kosht moving downslope as a whole. For any future access road or camp, the red belt is the ground to watch. InSAR time series from these same two orbits would measure that creep directly.</p>
+</div>
+
+<h2>6 · Ore potential: what is known</h2>
+<div class="col">
+<p>The mineral record for this corridor is thin, and the published sources are candid about it. Stauffer found no economic deposit in the central Mastuj valley. He recorded three things of interest:</p>
+</div>
+<div class="tw"><table>
+<thead><tr><th>Commodity</th><th>What is reported</th><th>Where</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Antimony</td><td>Stibnite pieces brought in by villagers, not seen in place</td><td>Above Lon, NW of the river</td><td><span class="tag t-primary">USGS 1975</span></td></tr>
+<tr><td>Tungsten</td><td>Scheelite at 4.4 and 7.6 grains/g of heavy minerals, 2–3× the northern-Pakistan norm</td><td>Mouth of Reshun Gol; Mastuj River above it</td><td><span class="tag t-primary">USGS 1975</span></td></tr>
+<tr><td>Aluminium, iron</td><td>Bright-red nodular lateritic layer, 5–20 ft thick: 35% Al₂O₃, 16% Fe₂O₃, 10% FeO, 22% SiO₂. Judged uneconomic (high silica, remote)</td><td>Damun Gol, about 1 mile E of Reshun</td><td><span class="tag t-primary">USGS 1975</span></td></tr>
+<tr><td>Antimony–lead</td><td>Krinj–Kamal Gol, worked on a small scale since 1939; about 100,000 t "exploration information" status</td><td>Near Partsan, SW along the same belt</td><td><span class="tag t-primary">KP DGMM 2014</span></td></tr>
+<tr><td>Au–Ag–Pb–Sb</td><td>Boulangerite veins rich in gold and silver</td><td>Awireth, Sewakht (Lutkho valley)</td><td><span class="tag t-primary">KP DGMM 2014</span></td></tr>
+<tr><td>Antimony</td><td>Historic underground output of about 9,000 t stibnite ore at about 40% Sb</td><td>Awireth</td><td><span class="tag t-unver">search summary only</span></td></tr>
+<tr><td>Iron</td><td>Laterite-type ironstones, judged uneconomic at altitude</td><td>Buni Zom (Golen Gol; Reshun side)</td><td><span class="tag t-primary">KP DGMM 2014</span></td></tr>
+</tbody></table></div>
+<div class="col">
+<p>The KP Minerals Department's investor package places this ground in two proposed exploration blocks for Au–Ag–Sb along the Reshun Fault Zone: Block-05 "Mastuj" (184 km²) and Block-06 "Reshun" (191 km²). The same report is sober about scale. After 50 million years of uplift and erosion, it concludes that the chances of world-class ore bodies are minimal. The realistic target is small, structurally controlled, metamorphogenic vein deposits.</p>
+<p>That fits everything the satellites show. A quartz–stibnite vein a metre wide is invisible in a 20 m or 60 m pixel, whatever the number of bands. Satellites can map the structure that hosts such veins, and the belt's thrust margins are that structure. The ground has to be sampled to find the veins themselves.</p>
+</div>
+
+<h2>7 · Where to look next</h2>
+<figure><img src="img/targets_map.jpg" alt="Map of red belt outline, streams and sampling sites"></figure>
+<div class="col"><p>I computed the drainage network from the DEM (40 m D8, priority-flood filled). Every place where a stream of 1 km² or more crosses the red-belt margin is a candidate sampling site. After merging duplicates, 14 remain. A tributary crossing a thrust carries debris from any vein along it. Sediment at the crossing samples the whole upstream reach, and that is how Chitral's known Sb–Pb districts show up in regional geochemistry.</p></div>
+<div class="tw"><table>
+<thead><tr><th>Site</th><th class="n">Lat °N</th><th class="n">Lon °E</th><th class="n">Catchment km²</th><th class="n">Elev m</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>SS01</td><td class="n">36.1487</td><td class="n">72.1150</td><td class="n">116.5</td><td class="n">1,980</td><td>Reshun Gol; USGS scheelite sample reach. Re-sample first</td></tr>
+<tr><td>SS02</td><td class="n">36.2326</td><td class="n">72.2486</td><td class="n">20.8</td><td class="n">2,619</td><td>Gol draining towards Buni, NE belt</td></tr>
+<tr><td>SS03</td><td class="n">36.1994</td><td class="n">72.1830</td><td class="n">20.8</td><td class="n">2,412</td><td>Charun Gol, Charun Quartzite type section</td></tr>
+<tr><td>SS04</td><td class="n">36.2215</td><td class="n">72.2489</td><td class="n">18.3</td><td class="n">2,877</td><td>Same gol as SS02, upper margin</td></tr>
+<tr><td>SS05</td><td class="n">36.1941</td><td class="n">72.1903</td><td class="n">15.6</td><td class="n">2,573</td><td>Charun Gol, upper margin</td></tr>
+<tr><td>SS06</td><td class="n">36.1914</td><td class="n">72.1984</td><td class="n">13.3</td><td class="n">2,744</td><td>Charun Gol branch</td></tr>
+<tr><td>SS07</td><td class="n">36.2208</td><td class="n">72.2049</td><td class="n">6.9</td><td class="n">2,170</td><td>Charun Oweer gol, lower margin</td></tr>
+<tr><td>SS08</td><td class="n">36.2094</td><td class="n">72.2427</td><td class="n">6.7</td><td class="n">3,221</td><td>About 2.5 km downslope of EMIT lead E1</td></tr>
+<tr><td>SS09</td><td class="n">36.1703</td><td class="n">72.1431</td><td class="n">4.0</td><td class="n">2,155</td><td>SW belt</td></tr>
+<tr><td>SS10</td><td class="n">36.2149</td><td class="n">72.2131</td><td class="n">3.7</td><td class="n">2,416</td><td>Charun Oweer</td></tr>
+<tr><td>SS11</td><td class="n">36.1720</td><td class="n">72.1529</td><td class="n">3.2</td><td class="n">2,445</td><td>SW belt</td></tr>
+<tr><td>SS12</td><td class="n">36.1593</td><td class="n">72.1195</td><td class="n">2.9</td><td class="n">2,045</td><td>Near Reshun</td></tr>
+<tr><td>SS13</td><td class="n">36.1911</td><td class="n">72.2162</td><td class="n">2.7</td><td class="n">3,248</td><td>Upper margin, central belt</td></tr>
+<tr><td>SS14</td><td class="n">36.2389</td><td class="n">72.2697</td><td class="n">2.0</td><td class="n">2,451</td><td>Buni side</td></tr>
+</tbody></table></div>
+<div class="col">
+<h3>Recommended programme, cheapest first</h3>
+<p>At each site, take a −80 mesh stream sediment and a panned heavy-mineral concentrate. Analyse the sediment for Sb, As, Au, Ag, Pb, Zn, Cu, W and Hg by aqua-regia ICP-MS, with fire assay for gold. Count scheelite in the concentrate under UV light. Visit E1 on the same trip and take rock chips; send any sulphide-bearing sample for four-acid or fusion ICP to get total grades. Order archival GSP and Austromineral (1974–78) maps and data before fieldwork; the Austromineral work explored Buni Zom iron. After that, depending on results: ground magnetics or self-potential along the belt margins, then IP, then trenching. That is the sequence that found the shallow sulphides at Drosh.</p>
+<p><b>Grade is a measurement, not an inference.</b> Nothing in this report is an assay. No figure here estimates tonnage or grade for any site in this area.</p>
+</div>
+
+<h2>8 · Methods and limits</h2>
+<div class="col">
+<p><b>Location.</b> I fitted a physical camera to 24 OSM-geocoded labels plus GLO-30 elevations, with an RMS error of 19 px. Every fit variant converges on the same position: free or fixed field of view, 1.0–2.0× terrain exaggeration, free principal point. Yet the render below hides the red belt behind a foreground ridge, which your screenshot does not. Labels on a near-planar valley floor cannot separate camera distance from zoom. Location therefore rests on the map-view match of the red belt, not on the camera.</p>
+</div>
+<figure><img src="img/render_vs_shot.jpg" alt="Screenshot compared with an independent render from the fitted camera"><figcaption>Top: your screenshot. Bottom: Sentinel-2 draped on the DEM from the fitted camera. Villages land on their labels, but the foreground geometry is wrong, so the camera was not used for footprint claims.</figcaption></figure>
+<div class="col">
+<p><b>Data.</b></p>
+<ul>
+<li>Copernicus GLO-30 DEM (AWS open data)</li>
+<li>Sentinel-2 L2A: 12 scenes, Aug–Sep 2023–2026, tile 43SBA (Element84 earth-search). BOA offset already applied, so no −1000 correction.</li>
+<li>ASTER AST_07XT and AST_05: 5 scenes, 2001–2003, before the SWIR detector failure in April 2008</li>
+<li>EMIT L2B MIN: 5 dates (NASA LP DAAC), orthorectified by GLT gather. Masked (−9999) and "no mineral" (0) pixels were kept apart.</li>
+<li>Sentinel-1 RTC: summer 2025, per orbit, never mixed across orbits (Microsoft Planetary Computer)</li>
+</ul>
+<p><b>Known limits.</b></p>
+<ul>
+<li>At 20–60 m the imagery cannot detect veins.</li>
+<li>Colour units come from clustering and are not a geological map.</li>
+<li>The red-belt outline approximates the Reshun Fm. Where it abuts other red rock (terrace soils, fault slices) it will be wrong locally.</li>
+<li>The trunk river's catchment is truncated at the analysis box. Tributary catchments are complete.</li>
+<li>EMIT library matches have a measurable false-positive rate (see the negative control).</li>
+</ul>
+</div>
+
+<h2>Sources</h2>
+<ol class="refs">
+<li>Stauffer, K.W. (1975). <a href="https://pubs.usgs.gov/publication/ofr75556">Reconnaissance geology of the central Mastuj Valley, Chitral State, Pakistan.</a> USGS Open-File Report 75-556 (Project Report PK-24). Read in full.</li>
+<li>Exploration Promotion Division, DG Mines &amp; Minerals KP (2014). <a href="https://kpminerals.gov.pk/uploads/geological_reports/attachment/1655712609_Follow-up%20Exploration%20Targets%20(Metals%20and%20Gemstones)%20Chitral.pdf">Follow-up Exploration Targets, District Chitral, eastern Hindukush.</a> Read in full.</li>
+<li><a href="https://www.zobodat.at/pdf/MittNatVerSt_120_0155-0165.pdf">Antimony, gold and polymetallic deposits of the Awireth area</a>, Mitt. naturwiss. Ver. Steiermark 120. Not opened (bot check); figures used only as labelled.</li>
+<li><a href="https://pubs.usgs.gov/of/1980/0837/report.pdf">Calkins et al., Geology and mineral resources of the Chitral–Partsan area</a>, USGS OFR 80-837. Downloaded; the scan's OCR is unreadable, so not used for figures.</li>
+</ol>
+</div>
+</body>
+</html>

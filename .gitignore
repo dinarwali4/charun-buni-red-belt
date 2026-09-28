@@ -1,0 +1,6 @@
+__pycache__/
+*.npz
+*.npy
+*.tif
+*.nc
+.DS_Store
